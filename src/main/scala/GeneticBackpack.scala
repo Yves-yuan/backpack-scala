@@ -37,14 +37,13 @@ object GeneticBackpack extends App {
         var curTime = System.currentTimeMillis()
         while (curTime - fromTime < maxTime) {
           val maxFit = runGenetic()
-          println("cur max:" + maxFit.g.price + " weight:" + maxFit.g.weight)
+//          println("cur max:" + maxFit.g.price + " weight:" + maxFit.g.weight)
           if (maxFit.g.price > maxPrice) {
             maxPrice = maxFit.g.price
             weightOfMaxPrice = maxFit.g.weight
             maxGroup = Some(maxFit.g)
           }
           println("maxFit:" + maxPrice + " weight:" + weightOfMaxPrice)
-          //          maxGroup.get.g.foreach(println)
           curTime = System.currentTimeMillis()
         }
       }
@@ -93,7 +92,7 @@ object GeneticBackpack extends App {
       wj += 1
       curTime = System.currentTimeMillis()
     }
-    println("iteration:" + wj)
+//    println("iteration:" + wj)
     maxFit
   }
 

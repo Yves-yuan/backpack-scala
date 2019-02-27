@@ -1,4 +1,4 @@
-name := "test"
+name := "backpack-scala"
 
 version := "0.1"
 
