@@ -6,11 +6,16 @@ import scala.util.Random
 object GeneticBackpack extends App {
   implicit val switch: SwitchLevel.Value = SwitchLevel.Off
   val checkSwitch: SwitchLevel.Value = SwitchLevel.Off
+  val file = new File("./data/data1.txt")
   val mutateFactor = 0.1
   val initFactor = 16
   val mutateMaxNum = 0.01
   val maxConvergenceNum = 100
-  val file = new File("./data/data1.txt")
+  val maxIteration = 6000
+  val minIteration = 50
+  val continuousVariance = 50
+  val varianceFactor = 1.0 / 100
+  val maxTime = 4000
   val reader = new FileReader(file)
   val lineReader = new BufferedReader(reader)
   val firstLine = lineReader.readLine()
@@ -22,12 +27,7 @@ object GeneticBackpack extends App {
     val il = lineReader.readLine().split(" ")
     items.append(Item(il(1).toInt, il(0).toInt))
   }
-  val maxIteration = 6000
-  val minIteration = 50
-  val continuousVariance = 50
-  val varianceFactor = 1.0 / 100
   val fromTime = System.currentTimeMillis()
-  val maxTime = 4000
   var maxPrice = 0L
   var weightOfMaxPrice = 0L
   var maxGroup: Option[Group] = None
@@ -86,19 +86,9 @@ object GeneticBackpack extends App {
       if (curGenMaxFit.g.weight <= maxWeight && maxFit.g.weight > maxWeight) {
         maxFit = GroupWithFitness(Group(curGenMaxFit.g.g.clone(), curGenMaxFit.g.weight, curGenMaxFit.g.price), curGenMaxFit.fitness)
         convergenceNum = 0
-        //        println("iteration:" + wj)
-        //        println("max price:" + maxFit.g.price)
-        val curTime = System.currentTimeMillis()
-        val elipse = curTime - fromTime
-        //        println("elipse:" + elipse)
       } else if (curGenMaxFit.g.weight <= maxWeight && curGenMaxFit.g.price > maxFit.g.price) {
         maxFit = GroupWithFitness(Group(curGenMaxFit.g.g.clone(), curGenMaxFit.g.weight, curGenMaxFit.g.price), curGenMaxFit.fitness)
         convergenceNum = 0
-        //        println("iteration:" + wj)
-        //        println("max price:" + maxFit.g.price)
-        val curTime = System.currentTimeMillis()
-        val elipse = curTime - fromTime
-        //        println("elipse:" + elipse)
       }
       wj += 1
       curTime = System.currentTimeMillis()
@@ -113,13 +103,6 @@ object GeneticBackpack extends App {
       println("fitness")
       fitnessGroups.foreach(println)
     }
-    //    val retainSize = scala.math.round(fitnessGroups.length.toDouble / 2).toInt
-    //    val (retainGroups, retainTotalPrice, _) = select(fitnessGroups, totalFitness, retainSize)
-    //    checkFb(retainGroups)
-    //    SwitchY.run {
-    //      println("retain")
-    //      retainGroups.foreach(println)
-    //    }
     val matingSize = fitnessGroups.length
     val (toMatingGroups, _, _) = select(fitnessGroups, totalFitness, matingSize)
     checkFb(toMatingGroups)
@@ -354,7 +337,6 @@ object GeneticBackpack extends App {
     val variance = result.map(gwf => {
       (gwf.fitness - meanFitness) * (gwf.fitness - meanFitness)
     }).sum
-    //    println(variance)
     (result, totalFitness, maxGroupWithFitness, variance)
   }
 
